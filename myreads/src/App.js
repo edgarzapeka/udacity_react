@@ -38,15 +38,9 @@ class BooksApp extends React.Component {
   }
 
   render() {
-    const currentlyReading = this.state.data.filter(book => {
-      return book.shelf === 'currentlyReading'
-    });
-    const wantToRead = this.state.data.filter(book => {
-      return book.shelf === 'wantToRead'
-    });
-    const read = this.state.data.filter(book => {
-      return book.shelf === 'read'
-    });
+    const currentlyReading = this.state.data.filter(book => book.shelf === 'currentlyReading' );
+    const wantToRead = this.state.data.filter(book => book.shelf === 'wantToRead' );
+    const read = this.state.data.filter(book => book.shelf === 'read' );
 
     return (
       <div className="app">
