@@ -106,7 +106,7 @@ class AddPost extends Component{
     }
 }
 
-function mapStateToProps({categories, posts, comments, modals}){
+function mapStateToProps({categories, modals}){
     return {
       categories: categories,
       modals: modals

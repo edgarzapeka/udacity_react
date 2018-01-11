@@ -30,7 +30,7 @@ class Post extends Component{
                 </div>
                 <div className="col-md-10">
                     <div className="row">
-                        <Link to={`/post/${this.props.post.id}`}>
+                        <Link to={`/${this.props.post.category}/${this.props.post.id}`}>
                             <h3>{this.props.post.title}</h3>
                         </Link>
                     </div>
@@ -50,7 +50,7 @@ class Post extends Component{
                         </Link>
                     </div>
                     <div className="col-md-12">
-                        <Link to={`/post/${this.props.post.id}`}>
+                        <Link to={`/${this.props.post.category}/${this.props.post.id}`}>
                             <MdRemoveRedEye size="30" />
                         </Link>
                     </div>

@@ -58,7 +58,7 @@ class App extends Component {
               </Link></li>
               {this.props.categories.map((category) => {
                 return <li key={category} className='nav-item'>
-                          <Link to={`/category/${category}`} className='nav-link'>
+                          <Link to={`/${category}`} className='nav-link'>
                             {category}
                           </Link>
                         </li>
@@ -93,11 +93,11 @@ class App extends Component {
         <Route exact path="/" render={() => (
           <PostList />
         )} />
-        <Route exact path="/category/:categoryName" render={({ match }) => (
-          <Category title={match.params.categoryName} />
-        )} />
-        <Route exact path="/post/:id" render={ ({match}) => (
+        <Route  exact path="/:category/:id" render={ ({match}) => (
           <ViewPost id={match.params.id}/>
+        )} />
+        <Route exact path="/:categoryName" render={({ match }) => (
+          <Category title={match.params.categoryName} />
         )} />
         </div>
       </Router>
