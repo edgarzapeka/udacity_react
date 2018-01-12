@@ -61,6 +61,12 @@ class AddPost extends Component{
         }
     }
 
+    invalidFormMessage(text){
+        return (
+            <small id="emailHelp" class="form-text text-danger">{text}</small>
+        )
+    }
+
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
@@ -68,21 +74,21 @@ class AddPost extends Component{
                     <label htmlFor="title">Enter Title:</label>
                     <input type="text" className="form-control" name="title" onChange={this.handlePropertyValue}/>
                     {!this.state.validation.isTitleValid && 
-                        <small id="emailHelp" class="form-text text-danger">Author Name is invalid</small>
+                        this.invalidFormMessage("Author Name is invalid")
                     }
                 </div>
                 <div className="form-group">
                     <label htmlFor="title">Enter Body:</label>
                     <textarea className="form-control" rows="3" name="body" onChange={this.handlePropertyValue}></textarea>
                     {!this.state.validation.isBodyValid && 
-                        <small id="emailHelp" class="form-text text-danger">Body is invalid</small>
+                        this.invalidFormMessage("Body is invalid")
                     }
                 </div>
                 <div className="form-group">
                     <label htmlFor="title">Enter Author Name:</label>
                     <input type="text" className="form-control" name="authorName" onChange={this.handlePropertyValue}/>
                     {!this.state.validation.isAuthorNameValid && 
-                        <small id="emailHelp" class="form-text text-danger">Author Name is invalid</small>
+                        this.invalidFormMessage("Author Name is invalid")
                     }
                 </div>
                 <div className="form-group">
@@ -94,12 +100,12 @@ class AddPost extends Component{
                         } )}
                     </select>
                     {!this.state.validation.isCategoryValid && 
-                        <small id="emailHelp" class="form-text text-danger">Category is invalid</small>
+                        this.invalidFormMessage("Category is invalid")
                     }
                 </div>
                 <div className="form-group">
                     <button type="submit" className="btn btn-primary">Save</button>
-                    <button className="btn btn-primary">Cancel</button>
+                    <button className="btn btn-primary" onClick={this.props.closeModal}>Cancel</button>
                 </div>
             </form>
         ) 

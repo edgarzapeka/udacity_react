@@ -43,6 +43,14 @@ class EditComment extends Component {
         }
     }
 
+    invalidFormMessage(text){
+        return(
+            <div className="form-group-row mb-4">
+                <small class="form-text text-danger">{text}</small>
+            </div>
+        )
+    }
+
     render(){
         return (
             <form onSubmit={this.handleSubmit}>
@@ -56,10 +64,8 @@ class EditComment extends Component {
                     <label >Body:</label>
                     <textarea className="form-control" rows="3" name="body" value={this.state.body} onChange={this.handlePropertyValue}></textarea>
                 </div>
-                {!this.state.validation.isBodyValid && 
-                    <div className="form-group-row mb-4">
-                        <small class="form-text text-danger">Body is invalid</small>
-                    </div>
+                {!this.state.validation.isBodyValid &&
+                    this.invalidFormMessage("Body is invalid") 
                 }
                 <button type="submit" className="btn btn-primary">Save</button>
                 <button className="btn btn-primary ml-2" onClick={this.props.closeEditCommentModal}>Cancel</button>

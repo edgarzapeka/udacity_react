@@ -48,6 +48,12 @@ class EditPost extends Component{
         }
     }
 
+    invalidFormMessage(text){
+        return (
+            <small id="emailHelp" class="form-text text-danger">{text}</small>
+        )
+    }
+
     render(){
         const date = new Date(this.props.post.timestamp)
         const dateValue = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
@@ -58,14 +64,14 @@ class EditPost extends Component{
                     <label htmlFor="title">Enter Title:</label>
                     <input type="text" className="form-control" name="title" value={this.state.title} onChange={this.handlePropertyValue}/>
                     {!this.state.validation.isTitleValid && 
-                        <small id="emailHelp" class="form-text text-danger">Author Name is invalid</small>
+                        this.invalidFormMessage("Author Name is invalid")
                     }
                 </div>
                 <div className="form-group">
                     <label htmlFor="title">Enter Body:</label>
                     <textarea className="form-control" rows="3" name="body" value={this.state.body} onChange={this.handlePropertyValue}></textarea>
                     {!this.state.validation.isBodyValid && 
-                        <small id="emailHelp" class="form-text text-danger">Body is invalid</small>
+                        this.invalidFormMessage("Body is invalid")
                     }
                 </div>
                 <div className="form-group">

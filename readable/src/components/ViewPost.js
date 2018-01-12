@@ -72,6 +72,17 @@ class ViewPost extends Component{
         }
     }
 
+    invalidFormMessage(text){
+        return (
+            <div className="form-group row">
+                <div className="col-sm-2"></div>
+                <div className="col-sm-10">
+                    <small class="form-text text-danger">{text}</small>
+                </div>
+            </div>
+        )
+    }
+
     render(){
         
         if (this.props.post === undefined){
@@ -152,12 +163,7 @@ class ViewPost extends Component{
                         </div>
                     </div>
                     {!this.state.validation.isAuthorNameValid && 
-                        <div className="form-group row">
-                            <div className="col-sm-2"></div>
-                            <div className="col-sm-10">
-                                <small class="form-text text-danger">Author Name is invalid</small>
-                            </div>
-                        </div>
+                        this.invalidFormMessage("Author Name is invalid")
                     }
                     <div className="form-group row">
                         <label className="col-sm-2 col-form-label">Text:</label>
@@ -166,12 +172,7 @@ class ViewPost extends Component{
                         </div>
                     </div>
                     {!this.state.validation.isBodyValid && 
-                        <div className="form-group row">
-                            <div className="col-sm-2"></div>
-                            <div className="col-sm-10">
-                                <small class="form-text text-danger">Body is invalid</small>
-                            </div>
-                        </div>
+                        this.invalidFormMessage("Body is invalid")
                     }
                     <button className="btn btn-primary" type="submit">Send comment</button>
                     </form>
