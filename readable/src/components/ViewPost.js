@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
 import Comment from './Comment'
 import { connect } from 'react-redux'
-import { fetchComments, addComment } from '../actions/index'
+import { fetchComments, addComment, votePost, openEditPostModal, deletePost } from '../actions/index'
 import uuidv1 from 'uuid' 
 import {sortByDate, sortByVoteScore} from '../utils/sorts'
 import { isAuthorNameValid, isBodyValid } from '../utils/validation'
+import {Link} from 'react-router-dom'
+import MdDelete from 'react-icons/lib/md/delete'
+import MdEdit from 'react-icons/lib/md/edit'
+import MdThumbUp from 'react-icons/lib/md/thumb-up'
+import MdThumbDown from 'react-icons/lib/md/thumb-down'
 
 class ViewPost extends Component{
 
@@ -99,32 +104,42 @@ class ViewPost extends Component{
         this.state.sortOrder === 'date' ? this.props.comments.sort(sortByDate) :  this.props.comments.sort(sortByVoteScore)
 
         return (
-            <div className="row">
-                <div className="col-md-12">
-                    <div className="row justify-content-between">
-                        <div className="col-md-2">
-                            <h4>Score: {this.props.post.voteScore}</h4>
-                        </div>
-                        <div className="col-md-4">
+            <div className="row p-4">
+              <div className="col-md-12">
+                    <div className="row justify-content-md-center">
+                        <div className="col-md-auto">
                             <h3 className="text-center">{this.props.post.title}</h3>
-                        </div>
-                        <div className="col-md-2">
-                            <h5>{this.props.post.category}</h5>
                         </div>
                     </div>
                     <div className="row">
-                        <h5 className="p-4">
-                            {this.props.post.body}
-                        </h5>
+                        <div className="col-md-12">
+                            <h5 className="p-5">
+                                {this.props.post.body}
+                            </h5>
+                        </div>
                     </div>
                     <div className="row justify-content-between">
-                        <div className="col-md-2">
-                         <p>{date.getDate()}/{date.getMonth()}/{date.getFullYear()}</p>
+                        <div className="col-md-auto">
+                            <Link to="#">
+                                <MdThumbUp size="30" onClick={() => this.props.votePost(this.props.post.id, 'upVote')}/>
+                            </Link>
+                                <span className="mx-4">{this.props.post.voteScore}</span>
+                            <Link to="#">
+                                <MdThumbDown size="30" onClick={() => this.props.votePost(this.props.post.id, 'downVote')}/>
+                            </Link>
                         </div>
-                        <div className="col-md-2">
-                            <p>{this.props.post.author}</p>
+                        <div className="col-md-auto">
+                            <Link to="#">
+                                <MdDelete size="30" onClick={() => this.props.deletePost(this.props.post.id)}/>
+                            </Link>
+                            <Link to="#">
+                                <MdEdit size="30" onClick={() => this.props.openEditPostModal(this.props.post.id)}/>
+                            </Link>
                         </div>
-                </div>
+                        <div className="col-md-auto">
+                            <p>Date: <strong>{date.getDate()}/{date.getMonth()}/{date.getFullYear()}</strong> | Author: <strong>{this.props.post.author}</strong> | Comments Number: <strong>{this.props.post.commentCount}</strong> | Category: <strong>{this.props.post.category}</strong></p>
+                        </div>
+                    </div>
                 </div>
                 <div className="col-md-12">
                 </div>
@@ -192,7 +207,10 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch){
     return{
         fetchComments: (id) => dispatch(fetchComments(id)),
-        addComment: (comment) => dispatch(addComment(comment))
+        addComment: (comment) => dispatch(addComment(comment)),
+        votePost: (id, voteType) => dispatch(votePost(id, voteType)),
+        openEditPostModal: (id) => dispatch(openEditPostModal(id)),
+        deletePost: (id) => dispatch(deletePost(id))
     }
 }
 
