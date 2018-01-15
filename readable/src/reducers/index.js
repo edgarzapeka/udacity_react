@@ -17,7 +17,8 @@ import {
     SHOW_EDIT_POST_MODAL,
     HIDE_EDIT_POST_MODAL,
     SHOW_EDIT_COMMENT_MODAL,
-    HIDE_EDIT_COMMENT_MODAL 
+    HIDE_EDIT_COMMENT_MODAL,
+    FETCH_ONE_POST 
 } from '../actions/'
 
 import { combineReducers } from 'redux'
@@ -103,6 +104,8 @@ function posts(state = [], action){
     switch(action.type){
         case INIT_POSTS:
             return action.posts
+        case FETCH_ONE_POST:
+            return [ ...state, action.post ]
         case ADD_POST:
             return [...state, action.post]
         case EDIT_POST:

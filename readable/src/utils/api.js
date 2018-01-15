@@ -27,6 +27,13 @@ export function getPosts(category){
     })
 }
 
+export function getPost(id){
+    return fetch(`${host}/posts/${id}`, {
+        method: 'GET',
+        headers: headers
+    })
+}
+
 export function editPost(id, data){
     return fetch(`${host}/posts/${id}`, {
         method: 'PUT',

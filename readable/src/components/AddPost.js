@@ -63,7 +63,7 @@ class AddPost extends Component{
 
     invalidFormMessage(text){
         return (
-            <small id="emailHelp" class="form-text text-danger">{text}</small>
+            <small id="emailHelp" className="form-text text-danger">{text}</small>
         )
     }
 

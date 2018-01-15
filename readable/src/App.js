@@ -94,7 +94,7 @@ class App extends Component {
           <PostList />
         )} />
         <Route  exact path="/:category/:id" render={ ({match}) => (
-          <ViewPost id={match.params.id}/>
+          <ViewPost id={match.params.id} getPost={this.getPost}/>
         )} />
         <Route exact path="/:categoryName" render={({ match }) => (
           <Category title={match.params.categoryName} />

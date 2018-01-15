@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Comment from './Comment'
 import { connect } from 'react-redux'
-import { fetchComments, addComment, votePost, openEditPostModal, deletePost } from '../actions/index'
+import { fetchComments, addComment, votePost, openEditPostModal, deletePost, fetchOnePost } from '../actions/index'
 import uuidv1 from 'uuid' 
 import {sortByDate, sortByVoteScore} from '../utils/sorts'
 import { isAuthorNameValid, isBodyValid } from '../utils/validation'
@@ -31,13 +31,17 @@ class ViewPost extends Component{
     }
 
     componentDidMount(){
-        if (this.props.post !== undefined){
+        if (this.props.post === undefined){
+            fetchOnePost(this.props.id)
+            return
+        }
+        if (this.props.post !== undefined && this.props.post.commentCount !== 0){
             this.props.fetchComments(this.props.post.id)
         }
     }
 
     componentDidUpdate(){
-        if (this.props.post !== undefined && this.props.comments.length === 0){
+        if (this.props.post !== undefined && this.props.post.commentCount !== 0 && this.props.comments.length === 0){
             this.props.fetchComments(this.props.post.id)
         }
     }
@@ -92,11 +96,7 @@ class ViewPost extends Component{
         
         if (this.props.post === undefined){
             return (
-                <h1>Ooops</h1> 
-                // I would very appreciate if you could give me a better soulution than this hack. 
-                // I did it in order to avoid an arror that appear when you bookmark url for a post and then go the website.
-                // It somehow doesn't load a state on App.js page, but it works for Category.js component
-                // Very confused
+                <h1>Hello, the post you're looking for no longer exists.</h1> 
             )
         }
         

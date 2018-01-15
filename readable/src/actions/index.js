@@ -9,7 +9,8 @@ import {
     addComment as addCommentAPI,
     voteComment as voteCommentAPI,
     deleteComment as deleteCommentAPI,
-    editComment as editCommentAPI
+    editComment as editCommentAPI,
+    getPost as getPostAPI
 } from '../utils/api'
 
 export const ADD_COMMENT = 'ADD_COMMENT'
@@ -31,6 +32,7 @@ export const SHOW_EDIT_POST_MODAL = 'SHOW_EDIT_POST_MODAL'
 export const HIDE_EDIT_POST_MODAL = 'HIDE_EDIT_POST_MODAL'
 export const SHOW_EDIT_COMMENT_MODAL = 'SHOW_EDIT_COMMENT_MODAL'
 export const HIDE_EDIT_COMMENT_MODAL = 'HIDE_EDIT_COMMENT_MODAL'
+export const FETCH_ONE_POST = 'FETCH_ONE_POST'
 
 export function fetchCategories(){
     return (dispatch) => getCategories()
@@ -49,6 +51,15 @@ export function fetchPosts(){
     return (dispatch) => getPosts()
         .then(response => response.json())
         .then(json => dispatch(receivePosts(json)))
+}
+
+export function fetchOnePost(id){
+    return (dispatch) => getPostAPI(id)
+        .then(response => response.json())
+        .then(json => dispatch({
+            type: FETCH_ONE_POST,
+            post: json
+        }))
 }
 
 function receivePosts(posts){
