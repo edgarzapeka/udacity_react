@@ -45,7 +45,8 @@ class AddPost extends Component{
                 author: authorName,
                 category: category,
                 deleted: false,
-                voteScore: 1
+                voteScore: 1,
+                commentCount: 0
             })
     
             this.props.closeModal()

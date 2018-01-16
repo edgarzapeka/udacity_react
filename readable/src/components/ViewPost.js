@@ -64,7 +64,7 @@ class ViewPost extends Component{
                 author: this.state.authorName,
                 parentId: this.props.post.id,
                 voteScore: 1
-            })
+            }, this.props.post.id)
     
             this.setState( (state, props) => ({
                 authorName: '',
@@ -160,7 +160,7 @@ class ViewPost extends Component{
                         </div>
                     </div>
                     {this.props.comments.map( c => (
-                        <Comment id={c.id} key={c.id}/>
+                        <Comment id={c.id} key={c.id} postId={this.props.post.id}/>
                     ))}
                      {this.props.comments.length === 0 &&
                         <div className="row justify-content-md-center">
@@ -207,7 +207,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch){
     return{
         fetchComments: (id) => dispatch(fetchComments(id)),
-        addComment: (comment) => dispatch(addComment(comment)),
+        addComment: (comment, id) => dispatch(addComment(comment, id)),
         votePost: (id, voteType) => dispatch(votePost(id, voteType)),
         openEditPostModal: (id) => dispatch(openEditPostModal(id)),
         deletePost: (id) => dispatch(deletePost(id))

@@ -1,41 +1,8 @@
-import {
-    getCategories, 
-    getPosts, 
-    addPost as addPostAPI,
-    editPost as editPostAPI, 
-    deletePost as deletePostAPI,
-    votePost as votePostAPI ,
-    getPostComments as getPostCommentsAPI ,
-    addComment as addCommentAPI,
-    voteComment as voteCommentAPI,
-    deleteComment as deleteCommentAPI,
-    editComment as editCommentAPI,
-    getPost as getPostAPI
-} from '../utils/api'
-
-export const ADD_COMMENT = 'ADD_COMMENT'
-export const DELETE_COMMENT = 'DELETE_COMMENT'
-export const EDIT_COMMENT = 'EDIT_COMMENT'
-export const FETCH_COMMENT = 'FETCH_COMMENT'
-export const UPVOTE_COMMENT = 'UPVOTE_COMMENT'
-export const DOWNVOTE_COMMENT = 'DOWNVOTE_COMMENT'
-export const INIT_CATEGORIES = 'INIT_CATEGORIES'
-export const INIT_POSTS = 'INIT_POSTS'
-export const ADD_POST = 'ADD_POST'
-export const EDIT_POST = 'EDIT_POST'
-export const DELETE_POST = 'DELETE_POST'
-export const SHOW_ADD_POST_MODAL = 'SHOW_ADD_POST_MODAL'
-export const HIDE_ADD_POST_MODAL = 'HIDE_ADD_POST_MODAL'
-export const UPVOTE_POST = 'UPVOTE_POST'
-export const DOWNVOTE_POST = 'DOWNVOTE_POST'
-export const SHOW_EDIT_POST_MODAL = 'SHOW_EDIT_POST_MODAL'
-export const HIDE_EDIT_POST_MODAL = 'HIDE_EDIT_POST_MODAL'
-export const SHOW_EDIT_COMMENT_MODAL = 'SHOW_EDIT_COMMENT_MODAL'
-export const HIDE_EDIT_COMMENT_MODAL = 'HIDE_EDIT_COMMENT_MODAL'
-export const FETCH_ONE_POST = 'FETCH_ONE_POST'
+import * as API from '../utils/api'
+import * as Type from './types'
 
 export function fetchCategories(){
-    return (dispatch) => getCategories()
+    return (dispatch) => API.getCategories()
         .then(response => response.json())
         .then(json => dispatch(receiveCategories(json.categories)))
 }
@@ -43,58 +10,59 @@ export function fetchCategories(){
 function receiveCategories(categories){
     return {
         categories: categories.map(c => c.name),
-        type: INIT_CATEGORIES
+        type: Type.INIT_CATEGORIES
     }
 }
 
 export function fetchPosts(){
-    return (dispatch) => getPosts()
+    return (dispatch) => API.getPosts()
         .then(response => response.json())
         .then(json => dispatch(receivePosts(json)))
 }
 
 export function fetchOnePost(id){
-    return (dispatch) => getPostAPI(id)
+    return (dispatch) => API.getPost(id)
         .then(response => response.json())
-        .then(json => dispatch({
-            type: FETCH_ONE_POST,
-            post: json
+        .then(json => dispatch(
+        {
+            type: Type.FETCH_ONE_POST,
+            post: json 
         }))
 }
 
 function receivePosts(posts){
     return {
-        type: INIT_POSTS,
+        type: Type.INIT_POSTS,
         posts: posts
     }
 }
 
 export const postPost = post => dispatch => (
-    addPostAPI(post).then((response) => dispatch(addPost(post)))
+    API.addPost(post).then((response) => dispatch(addPost(post)))
 )
 
 const addPost = post => {
     return {
-        type: ADD_POST,
+        type: Type.ADD_POST,
         post: post
     }
 }
 
 export const openAddPostModal = () => {
     return {
-        type: SHOW_ADD_POST_MODAL
+        type: Type.SHOW_ADD_POST_MODAL
     }
 }
 
 export const closeAddPostModal = () => {
     return {
-        type: HIDE_ADD_POST_MODAL
+        type: Type.HIDE_ADD_POST_MODAL
     }
 }
 
 export function editPost(id, data){
-    return (dispatch) => editPostAPI(id, data).then(response => dispatch({
-        type: EDIT_POST,
+    return (dispatch) => API.editPost(id, data).then(response => dispatch({
+        type: Type.EDIT_POST,
         id: id,
         title: data.title,
         body: data.body
@@ -102,48 +70,55 @@ export function editPost(id, data){
 }
 
 export function deletePost(id){
-    return (dispatch) => deletePostAPI(id).then(response => dispatch({
-        type: DELETE_POST,
+    return (dispatch) => API.deletePost(id).then(response => dispatch({
+        type: Type.DELETE_POST,
         id: id
     }))
 }
 
 export function votePost(id, voteType){
-    return (dispatch) => votePostAPI(id, voteType).then(response => dispatch({
-        type: (voteType === 'upVote' ? UPVOTE_POST : DOWNVOTE_POST),
+    return (dispatch) => API.votePost(id, voteType).then(response => dispatch({
+        type: (voteType === 'upVote' ? Type.UPVOTE_POST : Type.DOWNVOTE_POST),
         id: id
     }))
 }
 
 function receiveComments(comments){
     return {
-        type: FETCH_COMMENT,
+        type: Type.FETCH_COMMENT,
         comments: comments
     }
 }
 
 export function fetchComments(id){
-    return (dispatch) => getPostCommentsAPI(id).then(response => response.json()).then(json => dispatch(receiveComments(json)))
+    return (dispatch) => API.getPostComments(id).then(response => response.json()).then(json => dispatch(receiveComments(json)))
 }
 
 function addCommentReducer(comment){
     return {
-        type: ADD_COMMENT,
+        type: Type.ADD_COMMENT,
         comment: comment
     }
 }
 
-export function addComment(comment){
-    return (dispatch) => addCommentAPI(comment).then(response => dispatch(addCommentReducer(comment)))
+export function addComment(comment, id){
+    return (dispatch) => API.addComment(comment).then(response => 
+        {
+            dispatch(addCommentReducer(comment))
+            dispatch({
+                type: Type.INCREASE_COMMENT_COUNT,
+                id: id
+            })
+    })
 }
 
 export function editComment(id, data){
-    return (dispatch) => editCommentAPI(id, data).then(response => dispatch(editCommentReducer(id, data)))
+    return (dispatch) => API.editComment(id, data).then(response => dispatch(editCommentReducer(id, data)))
 }
 
 function editCommentReducer(id, data){
     return {
-        type: EDIT_COMMENT,
+        type: Type.EDIT_COMMENT,
         id: id,
         timestamp: data.timestamp,
         body: data.body
@@ -151,41 +126,48 @@ function editCommentReducer(id, data){
 }
 
 export function voteComment(id, voteType){
-    return (dispatch) => voteCommentAPI(id, voteType).then(response => dispatch({
-        type: (voteType === 'upVote' ? UPVOTE_COMMENT : DOWNVOTE_COMMENT),
+    return (dispatch) => API.voteComment(id, voteType).then(response => dispatch({
+        type: (voteType === 'upVote' ? Type.UPVOTE_COMMENT : Type.DOWNVOTE_COMMENT),
         id: id
     }))
 }
 
-export function deleteComment(id){
-    return (dispatch) => deleteCommentAPI(id).then(response => dispatch({
-        type: DELETE_COMMENT,
-        id: id
-    }))
+export function deleteComment(id, postId){
+    return (dispatch) => API.deleteComment(id).then(response => 
+        {
+        dispatch({
+            type: Type.DELETE_COMMENT,
+            id: id
+            })
+        dispatch({
+            type: Type.DECREASE_COMMENT_COUNT,
+            id: postId
+        })
+    })
 }
 
 export function openEditPostModal(id){
     return {
-        type: SHOW_EDIT_POST_MODAL,
+        type: Type.SHOW_EDIT_POST_MODAL,
         id: id
     }
 }
 
 export function closeEditPostModal(){
     return {
-        type: HIDE_EDIT_POST_MODAL
+        type: Type.HIDE_EDIT_POST_MODAL
     }
 }
 
 export function openEditCommentModal(id){
     return {
-        type: SHOW_EDIT_COMMENT_MODAL,
+        type: Type.SHOW_EDIT_COMMENT_MODAL,
         id: id
     }
 }
 
 export function closeEditCommentModal(){
     return {
-        type: HIDE_EDIT_COMMENT_MODAL
+        type: Type.HIDE_EDIT_COMMENT_MODAL
     }
 }

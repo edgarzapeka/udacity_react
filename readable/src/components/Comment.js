@@ -33,7 +33,7 @@ function Comment(props){
             <div className="col-md-auto">
                 <div className="col-md-12">
                     <Link to="#">
-                        <MdDelete size="30" onClick={() => props.deleteComment(id)}/>
+                        <MdDelete size="30" onClick={() => props.deleteComment(id, props.postId)}/>
                     </Link>
                 </div>
                 <div className="col-md-12">
@@ -58,7 +58,7 @@ function mapStateToProps(state, ownProps){
 function mapDispatchToProps(dispatch){
     return {
         voteComment: (id, voteType) => dispatch(voteComment(id, voteType)),
-        deleteComment: (id) => dispatch(deleteComment(id)),
+        deleteComment: (id, postId) => dispatch(deleteComment(id, postId)),
         openCommentEditModal: (id) => dispatch(openEditCommentModal(id))
     }
 }
