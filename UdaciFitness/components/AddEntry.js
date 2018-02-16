@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'
-import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers'
+import { getMetricMetaInfo, timeToString, getDailyReminderValue, clearLocalNotification, createNotification, setLocalNotification } from '../utils/helpers'
 import DataHeader from './DateHeader'
 import UdaciSlider from './UdaciSlider'
 import UdaciSteppers from './UdaciSteppers'
@@ -29,6 +29,11 @@ class AddEntry extends Component{
         swim: 0,
         sleep: 0,
         eat: 0,
+    }
+
+    componentDidMount(){
+        clearLocalNotification()
+            .then(setLocalNotification)
     }
 
     increment = (metric) => {
