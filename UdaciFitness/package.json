@@ -22,7 +22,9 @@
     "expo": "^25.0.0",
     "react": "16.2.0",
     "react-native": "0.52.0",
+    "react-navigation": "^1.0.3",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "udacifitness-calendar": "^11.0.0"
   }
 }
