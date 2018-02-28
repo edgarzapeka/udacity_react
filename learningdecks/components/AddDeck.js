@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
 import { black, purple } from '../utils/colors'
 
 export default class AddDeck extends Component{
+    componentDidMount(){
+        debugger
+    }
     state = {
         deckTitle: ''
     }

@@ -6,6 +6,8 @@ import AddDeck from './components/AddDeck'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import { purple, white } from './utils/colors'
 import { Constants } from 'expo'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
 export default class App extends React.Component {
   render() {
