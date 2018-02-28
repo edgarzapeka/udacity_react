@@ -1,11 +1,13 @@
-import { ADD_DECK } from '../actions/index'
+import { ADD_DECK, RECEIVE_DECKS } from '../actions/index'
 
-function decks(state = {}, actions){
+function decks(state = {}, action){
     switch(action.type){
+        case RECEIVE_DECKS:
+            return action.decks
         case ADD_DECK:
             return {
-                ...actions.state,
-                ...actions.deck
+                ...action.state,
+                ...action.deck
             }
         default:
             return state

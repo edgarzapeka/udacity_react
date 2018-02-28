@@ -8,23 +8,26 @@ import { purple, white } from './utils/colors'
 import { Constants } from 'expo'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+import reducer from './reducers'
 
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{flex: 1}}>
-        <LearningStatusBar />
-        <MainNaivgator />
-      </View>
+      <Provider store={createStore(reducer)}>
+        <View style={{flex: 1}}>
+          <LearningStatusBar />
+          <MainNaivgator />
+        </View>
+      </Provider>
     );
   }
 }
 
 function LearningStatusBar({backgroundColor, ...props}){
   return (
-    <View style={{backgroundColor, height: Constants.statusBarHeight}}>
-      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
-    </View>
+      <View style={{backgroundColor, height: Constants.statusBarHeight}}>
+        <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+      </View>
   )
 }
 

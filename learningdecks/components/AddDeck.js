@@ -1,13 +1,27 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
 import { black, purple } from '../utils/colors'
+import { addDeck, fetchDecks } from '../utils/api'
+import { connect } from 'react-redux'
+import { submitDeck } from '../actions'
 
-export default class AddDeck extends Component{
-    componentDidMount(){
-        debugger
-    }
+class AddDeck extends Component{
     state = {
         deckTitle: ''
+    }
+
+    submit = () => {
+        this.props.dispatch(submitDeck({ [this.state.deckTitle]: {
+            title: this.state.deckTitle,
+            questions: []
+        } }))
+
+        addDeck(this.state.deckTitle, {
+            title: this.state.deckTitle,
+            questions: []
+        })
+
+        this.setState({deckTitle: ''})
     }
 
     render(){
@@ -17,10 +31,10 @@ export default class AddDeck extends Component{
                 <TextInput
                     style={{height: 40, width: 300, borderColor: 'gray', borderWidth: 1}}
                     onChangeText={(text) => this.setState({deckTitle: text})}
-                    value={this.state.text}
+                    value={this.state.deckTitle}
                 />
                 <Button
-                    onPress={() => console.log('Submitted!')}
+                    onPress={this.submit}
                     title='Submit'
                     color={purple}
                     accessibilityLabel="Submit button"
@@ -43,3 +57,11 @@ const styles = StyleSheet.create({
         fontSize: 24
     }
   });
+
+function mapStateToProps(decks){
+    return {
+        decks
+    }
+}
+
+export default connect(mapStateToProps)(AddDeck)
