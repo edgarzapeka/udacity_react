@@ -9,6 +9,8 @@ import { Constants } from 'expo'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
+import DeckView from './components/DeckView'
+import AddCard from './components/AddCard'
 
 export default class App extends React.Component {
   render() {
@@ -48,7 +50,7 @@ const Tabs = TabNavigator({
   },
 }, {
     navigationOptions: {
-      header: null
+      tabBarVisible: true
     },
     tabBarOptions: {
       activeTintColor: Platform.OS === 'ios' ? purple : white,
@@ -69,7 +71,22 @@ const Tabs = TabNavigator({
 
 const MainNaivgator = StackNavigator({
   Home: {
-    screen: Tabs
+    screen: Tabs,
+    navigationOptions: {
+      tabBarLabel: 'Desk List'
+    }
+  },
+  DeckView: {
+    screen: DeckView,
+    navigationOptions: {
+      tabBarLabel: 'Desk View'
+    }
+  },
+  AddCard:{
+    screen: AddCard,
+    navigationOptions: {
+      tabBarLabel: 'Add New Card'
+    }
   }
 })
 

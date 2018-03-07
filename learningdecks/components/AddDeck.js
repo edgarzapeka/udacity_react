@@ -6,6 +6,13 @@ import { connect } from 'react-redux'
 import { submitDeck } from '../actions'
 
 class AddDeck extends Component{
+    static navigationOptions = ({ navigation }) => {
+        const {state} = navigation;
+        return {
+          title: 'Add Deck',
+        };
+      };
+
     state = {
         deckTitle: ''
     }
