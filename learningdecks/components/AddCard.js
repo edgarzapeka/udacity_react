@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
 import { connect } from 'react-redux'
 import { purple } from '../utils/colors'
+import { addCard } from '../actions'
+import { addQuestion } from '../utils/api'
 
 class AddCard extends Component{
 
@@ -31,20 +33,19 @@ class AddCard extends Component{
                     onChangeText={(text) => this.setState({answer: text})}
                     value={this.state.answer} />
                 <Button
-                   onPress={() => console.log('yo')}
+                   onPress={() => {
+                        addQuestion(this.props.deckTitle, {
+                            question: this.state.question,
+                            answer: this.state.answer
+                        })
+                        this.props.submitCard(this.state.question, this.state.answer, this.props.deckTitle)
+                        this.props.goBack()
+                   }}
                    title="Submit"
                    color={purple} 
                 />
             </View>
         )
-    }
-}
-
-function mapStateToProps(decks, { navigation }){
-    const { deckTitle } = navigation.state.params
-
-    return{
-        deckTitle
     }
 }
 
@@ -60,4 +61,24 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(mapStateToProps)(AddCard)
+function mapStateToProps(decks, { navigation }){
+    const { deckTitle } = navigation.state.params
+
+    return{
+        deckTitle
+    }
+}
+
+function mapDispatchToProps(dispatch, { navigation }){
+    return {
+        submitCard: (question, answer, deckTitle) => {
+            dispatch(addCard({
+                question: question,
+                answer: answer
+            }, deckTitle))
+        },
+        goBack: () => navigation.goBack()
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddCard)

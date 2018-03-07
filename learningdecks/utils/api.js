@@ -22,3 +22,11 @@ export function clearDecks(){
 export function initializeDecks(){
     return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({}))
 }
+
+export function addQuestion(deckTitle, question){
+    fetchDecks().then(data => {
+        let deck = data[deckTitle]
+        deck.questions.push(question)
+        addDeck(deckTitle, deck).then('added question!')
+    })
+}

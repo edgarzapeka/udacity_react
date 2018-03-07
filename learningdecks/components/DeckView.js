@@ -29,7 +29,8 @@ class DeckView extends Component{
                        color={black}
                        />
                     <Button
-                        onPress={() => console.log('yo')}
+                        disabled={questions.length === 0 ? true : false }
+                        onPress={() => navigator.navigate('QuizView', {deckID: title})}
                         title="Start Quiz"
                         color={purple}
                     />

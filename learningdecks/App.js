@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 import reducer from './reducers'
 import DeckView from './components/DeckView'
 import AddCard from './components/AddCard'
+import QuizView from './components/QuizView'
 
 export default class App extends React.Component {
   render() {
@@ -86,6 +87,12 @@ const MainNaivgator = StackNavigator({
     screen: AddCard,
     navigationOptions: {
       tabBarLabel: 'Add New Card'
+    }
+  },
+  QuizView: {
+    screen: QuizView,
+    navigationOptions: {
+      tabBarLabel: 'Quiz'
     }
   }
 })
