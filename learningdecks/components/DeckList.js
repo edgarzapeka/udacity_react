@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { fetchDecks, clearDecks, initializeDecks } from '../utils/api'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../actions'
+import DeckItem from './DeckItem'
 
 class DeckList extends Component{
     componentDidMount(){
@@ -20,13 +21,12 @@ class DeckList extends Component{
     render(){
         const decks = this.props.decks
         
-
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 {Object.keys(decks).map((key) => {
-                    return (<Text>{decks[key].title}</Text>)
+                    return (<DeckItem key={key} deck={decks[key]}/>)
                 })}
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -35,8 +35,6 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
     },
   });
 
