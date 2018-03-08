@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, Platform, StatusBar, KeyboardAvoidingView } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation'
 import DeckList from './components/DeckList'
 import AddDeck from './components/AddDeck'
@@ -17,10 +17,10 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={createStore(reducer)}>
-        <View style={{flex: 1}}>
+        <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
           <LearningStatusBar />
           <MainNaivgator />
-        </View>
+        </KeyboardAvoidingView>
       </Provider>
     );
   }

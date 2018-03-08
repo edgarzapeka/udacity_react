@@ -52,10 +52,11 @@ const styles = StyleSheet.create({
         flexShrink: 2
     },
     title: {
-        fontSize: 24,
+        fontSize: 44,
     },
     subtitle: {
-        color: grey
+        color: grey,
+        fontSize: 26
     },
     buttonBlock: {
         justifyContent: 'center',
