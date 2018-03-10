@@ -3,7 +3,7 @@ import { Text, View, Button, StyleSheet, TextInput, TouchableOpacity, TouchableH
 import { connect } from 'react-redux'
 import { purple, red, black } from '../utils/colors'
 import CheckBox from 'react-native-checkbox'
-import { clearLocalNotifications, setLocalNotification } from '../utils/helpers'
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
 
 class QuizView extends Component{
@@ -28,7 +28,7 @@ class QuizView extends Component{
                 prevState.checkboxAnswer) ? prevState.score + 1 : prevState.score),
         }))
 
-        clearLocalNotifications().then(setLocalNotification)
+        clearLocalNotification().then(setLocalNotification)
     }
 
     checkAnswer = (answerType, answer, userAnswer, checkboxAnswer) => {

@@ -45,6 +45,7 @@ class AddCard extends Component{
             answer: this.state.answerType === 'bool' ? this.state.boolAnswer : this.state.answer,
             answerType: this.state.answerType 
         }, this.props.deckTitle)
+
         this.props.goBack()
     }
 

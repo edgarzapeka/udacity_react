@@ -2,8 +2,16 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { black, purple, grey } from '../utils/colors'
+import { fetchDecks} from '../utils/api'
 
 class DeckView extends Component{
+
+    componentWillReceiveProps(props){
+        fetchDecks().then(data => {
+            initializeDecks()
+            this.props.dispatch(receiveDecks({}))
+        })
+    }
 
     static navigationOptions = ({ navigation }) => {
         const {state} = navigation;
