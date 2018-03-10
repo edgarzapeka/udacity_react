@@ -15,6 +15,7 @@ class DeckList extends Component{
       };
 
     componentDidMount(){
+        //clearDecks() //for testing purposes
 
         fetchDecks().then(data => {
             if (data === null){

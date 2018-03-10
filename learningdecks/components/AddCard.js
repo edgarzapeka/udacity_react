@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TextInput, Button } from 'react-native'
+import { Text, View, StyleSheet, TextInput, Button, ScrollView, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { purple } from '../utils/colors'
 import { addCard } from '../actions'
 import { addQuestion } from '../utils/api'
+import CheckBox from 'react-native-checkbox'
 
 class AddCard extends Component{
 
@@ -16,48 +17,116 @@ class AddCard extends Component{
 
     state = {
         question: '',
-        answer: ''
+        answer: '',
+        answerType: 'bool', //openAnswer & bool
+        boolAnswer: true
+    }
+
+    submitQuestion = () => {
+        if (this.state.question === "" || ( this.state.answerType !== 'bool' ? this.state.answer === "" : false )){
+            Alert.alert(
+                'Validation Error!',
+                'You have to fill all the fields',
+                [
+                    {text: 'Ok', onPress: () => console.log('Validation Error. Empty Question Fields') }
+                ],
+                { cancelable: false }
+            )
+            return
+        }
+
+        addQuestion(this.props.deckTitle, {
+            question: this.state.question,
+            answer: this.state.answerType === 'bool' ? this.state.boolAnswer : this.state.answer,
+            answerType: this.state.answerType 
+        })
+        this.props.submitCard({
+            question: this.state.question,
+            answer: this.state.answerType === 'bool' ? this.state.boolAnswer : this.state.answer,
+            answerType: this.state.answerType 
+        }, this.props.deckTitle)
+        this.props.goBack()
     }
 
     render(){
+        const { answerType, boolAnswer } = this.state
+
         return (
-            <View>
-                <Text>Enter the question:</Text>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Text style={styles.title}>Enter question:</Text>
                 <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                    style={styles.input}
                     onChangeText={(text) => this.setState({question: text})}
                     value={this.state.question} />
-                <Text>Enter answer:</Text>
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={(text) => this.setState({answer: text})}
-                    value={this.state.answer} />
+                <Text style={styles.title}>Select answer type:</Text>
+                <View style={{flexDirection: 'row'}}>
+                    <CheckBox
+                        label='True / False'
+                        labelStyle = {{color: purple}}
+                        checked={answerType === 'bool' ? true : false}
+                        onChange={() => this.setState({answerType: 'bool'})}
+                    />
+                    <CheckBox
+                        label='Open answer'
+                        labelStyle = {{color: purple}}
+                        checked={answerType === 'bool' ? false : true}
+                        onChange={() => this.setState({answerType: 'openAnswer'})}
+                    />
+                </View>
+                <Text style={styles.title}>Enter answer:</Text>
+                {answerType === 'bool' ? 
+                (
+                <View style={{flexDirection: 'row'}}>
+                    <CheckBox
+                        label='True'
+                        labelStyle = {{color: purple}}
+                        checked={boolAnswer}
+                        onChange={() => this.setState({boolAnswer: true})}
+                    />
+                    <CheckBox
+                        label='False'
+                        labelStyle = {{color: purple}}
+                        checked={!boolAnswer}
+                        onChange={() => this.setState({boolAnswer: false})}
+                    />
+                </View>)
+                :
+                (
+                <View style={{width: '100%'}}>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => this.setState({answer: text})}
+                        value={this.state.answer} />
+                </View>
+                )}
                 <Button
-                   onPress={() => {
-                        addQuestion(this.props.deckTitle, {
-                            question: this.state.question,
-                            answer: this.state.answer
-                        })
-                        this.props.submitCard(this.state.question, this.state.answer, this.props.deckTitle)
-                        this.props.goBack()
-                   }}
-                   title="Submit"
-                   color={purple} 
+                    onPress={() => this.submitQuestion()}
+                    title="Submit"
+                    color={purple} 
                 />
-            </View>
+            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        padding: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-around',
     },
     title:{
-
+        fontSize: 18,
+        color: purple,
+        alignSelf: 'center',
     },
-    buttonSubmit:{
-
+    input: {
+        borderColor: purple,
+        borderWidth: 2,
+        height: 40,
+        width: '100%'
     }
 })
 
@@ -71,11 +140,8 @@ function mapStateToProps(decks, { navigation }){
 
 function mapDispatchToProps(dispatch, { navigation }){
     return {
-        submitCard: (question, answer, deckTitle) => {
-            dispatch(addCard({
-                question: question,
-                answer: answer
-            }, deckTitle))
+        submitCard: (deck, deckTitle) => {
+            dispatch(addCard(deck, deckTitle))
         },
         goBack: () => navigation.goBack()
     }

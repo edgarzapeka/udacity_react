@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native'
 import { black, purple } from '../utils/colors'
 import { addDeck, fetchDecks } from '../utils/api'
 import { connect } from 'react-redux'
@@ -18,6 +18,18 @@ class AddDeck extends Component{
     }
 
     submit = () => {
+        if (this.state.deckTitle === ""){
+            Alert.alert(
+                'Validation Error!',
+                'You have to type Deck Title',
+                [
+                    {text: 'Ok', onPress: () => console.log('Validation Error. Empty Deck Title') }
+                ],
+                { cancelable: false }
+            )
+            return
+        }
+
         this.props.dispatch(submitDeck({ [this.state.deckTitle]: {
             title: this.state.deckTitle,
             questions: []
@@ -36,7 +48,7 @@ class AddDeck extends Component{
             <View style={styles.container}>
                 <Text style={styles.deckTitle}>Create New Deck</Text>
                 <TextInput
-                    style={{height: 40, width: 300, borderColor: 'gray', borderWidth: 1}}
+                    style={styles.input}
                     onChangeText={(text) => this.setState({deckTitle: text})}
                     value={this.state.deckTitle}
                 />
@@ -57,12 +69,21 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+      padding: 15
     },
     deckTitle: {
         marginTop: 10,
         marginBottom: 10,
         fontSize: 24
-    }
+    },
+    input: {
+        borderColor: purple,
+        borderWidth: 2,
+        height: 40,
+        width: '100%',
+        marginTop: 50,
+        marginBottom: 50
+    },
   });
 
 function mapStateToProps(decks){

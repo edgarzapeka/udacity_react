@@ -12,8 +12,13 @@ import reducer from './reducers'
 import DeckView from './components/DeckView'
 import AddCard from './components/AddCard'
 import QuizView from './components/QuizView'
+import { setLocalNotification } from './utils/helpers'
 
 export default class App extends React.Component {
+  componentDidMount(){
+    setLocalNotification()
+  }
+
   render() {
     return (
       <Provider store={createStore(reducer)}>
