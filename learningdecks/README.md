@@ -7,3 +7,8 @@ run npm install in the root folder
 
 - run npm start in the root folder
 - run app in emulator
+
+## Supporting platforms
+
+- android
+- ios

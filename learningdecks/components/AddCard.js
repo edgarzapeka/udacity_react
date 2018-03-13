@@ -35,18 +35,22 @@ class AddCard extends Component{
             return
         }
 
-        addQuestion(this.props.deckTitle, {
+        const deck = {
             question: this.state.question,
             answer: this.state.answerType === 'bool' ? this.state.boolAnswer : this.state.answer,
             answerType: this.state.answerType 
-        })
-        this.props.submitCard({
-            question: this.state.question,
-            answer: this.state.answerType === 'bool' ? this.state.boolAnswer : this.state.answer,
-            answerType: this.state.answerType 
-        }, this.props.deckTitle)
+        }
 
+        addQuestion(this.props.deckTitle, deck)
+        this.props.submitCard(deck, this.props.deckTitle)
+
+        // Yeah, it's a such a hack but it works perefectly. 
+        // By the way no ideay way it's not updating with redux.
+        // It seems that when I call goBack() it doens't call connect(mapStateToProps)
+        // I would very appreciate if you tell me how to do it correct way. Thanks
         this.props.goBack()
+        this.props.goBack()
+        this.props.navigation.navigate('DeckView')
     }
 
     render(){
@@ -62,7 +66,7 @@ class AddCard extends Component{
                 <Text style={styles.title}>Select answer type:</Text>
                 <View style={{flexDirection: 'row'}}>
                     <CheckBox
-                        label='True / False'
+                        label='Correct / Incorrect'
                         labelStyle = {{color: purple}}
                         checked={answerType === 'bool' ? true : false}
                         onChange={() => this.setState({answerType: 'bool'})}
@@ -74,18 +78,18 @@ class AddCard extends Component{
                         onChange={() => this.setState({answerType: 'openAnswer'})}
                     />
                 </View>
-                <Text style={styles.title}>Enter answer:</Text>
+                <Text style={styles.title}>The Correct Answer:</Text>
                 {answerType === 'bool' ? 
                 (
                 <View style={{flexDirection: 'row'}}>
                     <CheckBox
-                        label='True'
+                        label='Correct'
                         labelStyle = {{color: purple}}
                         checked={boolAnswer}
                         onChange={() => this.setState({boolAnswer: true})}
                     />
                     <CheckBox
-                        label='False'
+                        label='Incorrect'
                         labelStyle = {{color: purple}}
                         checked={!boolAnswer}
                         onChange={() => this.setState({boolAnswer: false})}
@@ -132,10 +136,10 @@ const styles = StyleSheet.create({
 })
 
 function mapStateToProps(decks, { navigation }){
-    const { deckTitle } = navigation.state.params
+    const { deckTitle} = navigation.state.params
 
     return{
-        deckTitle
+        deckTitle        
     }
 }
 
@@ -144,7 +148,7 @@ function mapDispatchToProps(dispatch, { navigation }){
         submitCard: (deck, deckTitle) => {
             dispatch(addCard(deck, deckTitle))
         },
-        goBack: () => navigation.goBack()
+        goBack: () => navigation.goBack(null)
     }
 }
 

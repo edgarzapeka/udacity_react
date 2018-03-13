@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, Button, StyleSheet, TextInput, TouchableOpacity, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
-import { purple, red, black } from '../utils/colors'
+import { purple, red, black, green } from '../utils/colors'
 import CheckBox from 'react-native-checkbox'
 import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
@@ -71,7 +71,12 @@ class QuizView extends Component{
                     <View style={styles.buttonStartAgainContainer}>
                         <Button
                             onPress={() => this.startAgain()}
-                            title="Start Again"
+                            title="Restart Quiz"
+                            color={green}
+                        />
+                        <Button
+                            onPress={() => this.props.navigation.goBack()}
+                            title="Back to Deck"
                             color={purple}
                         />
                     </View>
@@ -84,6 +89,11 @@ class QuizView extends Component{
                     <View style={styles.statusLine}>
                         <Text style={{ fontSize: 24 }}>{currentIndex}/{lastIndex}</Text>
                         <View style={{alignSelf: 'flex-end'}}>
+                            <Button 
+                                onPress={() => this.flipCard()}
+                                title={this.state.cardSide === 'front' ? 'Show Answer' : 'Back to Question'}
+                                color={this.state.cardSide === 'front' ? red : black}
+                            />
                         </View>
                     </View>
                     <TouchableHighlight style={styles.cardTouchable} onPress={() => this.flipCard()}>
@@ -93,11 +103,6 @@ class QuizView extends Component{
                             <View style={styles.cardContainer}>
                                 <Text style={styles.title}>Answer:</Text>
                                 <Text style={styles.answer}>{deck.questions[currentIndex].answer.toString() }</Text>
-                                <Button
-                                    onPress={() => this.flipCard()}
-                                    title="Back"
-                                    color={purple}
-                                />
                             </View>
                         ): 
                         ( 
@@ -108,37 +113,40 @@ class QuizView extends Component{
                                 </View>
                                 
                                 <View>
-                                    <Text style={styles.title}>Answer</Text>
                                     {deck.questions[currentIndex].answerType === 'bool' ?
                                     (
                                         <View>
-                                            <CheckBox
-                                                label='True'
-                                                labelStyle = {{color: purple}}
-                                                checked={checkboxAnswer}
-                                                onChange={() => this.setState({checkboxAnswer: true})}
-                                            />
-                                            <CheckBox
-                                                label='False'
-                                                labelStyle = {{color: purple}}
-                                                checked={!checkboxAnswer}
-                                                onChange={() => this.setState({checkboxAnswer: false})}
-                                            />
+                                            <TouchableOpacity onPress={() => {
+                                                    this.setState({checkboxAnswer: true})
+                                                    this.submitAnswer()
+                                                }} style={{backgroundColor: green, width: 150, height: 90, borderRadius: 40, display: 'flex', justifyContent: 'center', marginBottom: 20}}
+                                            >
+                                                <Text style={{alignSelf: 'center', fontSize: 30}}>Correct</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => {
+                                                    this.setState({checkboxAnswer: false})
+                                                    this.submitAnswer()
+                                                }} style={{backgroundColor: red, width: 150, height: 90, borderRadius: 40, display: 'flex', justifyContent: 'center', marginBottom: 20}}
+                                            >
+                                                <Text style={{alignSelf: 'center', fontSize: 30}}>Incorrect</Text>
+                                            </TouchableOpacity>
                                         </View>
                                     )
                                     : (
-                                        <TextInput
-                                            style={{height: 40, width: 300, borderColor: 'gray', borderWidth: 1}}
-                                            onChangeText={(text) => this.setState({answer: text})}
-                                            value={this.state.answer}
-                                        />
+                                        <View>
+                                            <TextInput
+                                                style={{height: 40, width: 300, borderColor: 'gray', borderWidth: 1}}
+                                                onChangeText={(text) => this.setState({answer: text})}
+                                                value={this.state.answer}
+                                            />
+                                            <Button
+                                                onPress={() => this.submitAnswer()}
+                                                title="Next"
+                                                color={purple}
+                                            />
+                                        </View>
                                     )}
                                 </View>
-                                <Button
-                                    onPress={() => this.submitAnswer()}
-                                    title="Next"
-                                    color={purple}
-                                />
                             </View>
                         )}
                     </View>
@@ -150,6 +158,7 @@ class QuizView extends Component{
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
         flex: 1,
         flexGrow: 1,
         flexShrink: 2,
@@ -185,8 +194,8 @@ const styles = StyleSheet.create({
     },
     statusLine: {
         alignSelf: 'flex-start',
+        display: 'flex',
         flexDirection: 'row',
-        display: 'flex'
     },
     resultViewContainer: {
         flex: 1,
@@ -206,11 +215,11 @@ const styles = StyleSheet.create({
     }
 })
 
-function mapStateToProps(decks, { navigation }){
-    const { deckID } = navigation.state.params
+function mapStateToProps(state, { navigation }){
+    //const { deckID } = navigation.state.params
 
     return {
-        deck: decks[deckID]
+        deck: state.decks[state.deckState]
     }
 }
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
 import { fetchDecks, clearDecks, initializeDecks } from '../utils/api'
 import { connect } from 'react-redux'
-import { receiveDecks } from '../actions'
+import { receiveDecks, selectCard } from '../actions'
 import { grey } from '../utils/colors'
 
 class DeckList extends Component{
@@ -35,7 +35,11 @@ class DeckList extends Component{
             <ScrollView style={styles.container}>
                 {Object.keys(decks).map((key) => {
                     return (
-                    <TouchableOpacity style={styles.deckContainer} key={key} onPress={() => navigator.navigate('DeckView', {deckID: key})}>
+                    <TouchableOpacity style={styles.deckContainer} key={key} onPress={() => {
+                        //console.log('yea')
+                        this.props.dispatch(selectCard(decks[key].title))
+                        navigator.navigate('DeckView')}
+                        }>
                         <Text style={styles.title}>{decks[key].title}</Text>
                         <Text style={styles.subtitle}>{decks[key].questions.length} cards</Text>
                     </TouchableOpacity>
@@ -66,9 +70,9 @@ const styles = StyleSheet.create({
     }
   });
 
-function mapStateToProps(decks, { navigation }){
+function mapStateToProps(state, { navigation }){
     return {
-        decks
+        decks: state.decks
     }
 }
 

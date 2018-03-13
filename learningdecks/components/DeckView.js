@@ -18,11 +18,13 @@ class DeckView extends Component{
         return {
           title: 'Deck View',
         };
-      };
+    };
 
     render(){
         const navigator = this.props.navigation
         const { title, questions } = this.props.deck
+        
+        console.log(this.props.deck.questions)
 
         return (
             <View style={styles.container}>
@@ -80,11 +82,12 @@ const styles = StyleSheet.create({
     }
 })
 
-function mapStateToProps(decks, { navigation }){
-    const { deckID } = navigation.state.params
+function mapStateToProps(state, { navigation }){
+    //const { deckID } = navigation.state.params
+    console.log(state)
 
     return {
-        deck: decks[deckID]
+        deck: state.decks[state.deckState]
     }
 }
 

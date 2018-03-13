@@ -1,8 +1,10 @@
 import { 
     ADD_DECK,
     RECEIVE_DECKS,
-    ADD_CARD    
+    ADD_CARD,
+    SELECTED_CARD    
 } from '../actions/index'
+import { combineReducers } from 'redux'
 
 function decks(state = {}, action){
     switch(action.type){
@@ -24,4 +26,13 @@ function decks(state = {}, action){
     }
 }
 
-export default decks
+function deckState(state = "", action){
+    switch(action.type){
+        case SELECTED_CARD:
+            return action.title
+        default:
+            return state
+    }
+}
+
+export default combineReducers({decks, deckState})

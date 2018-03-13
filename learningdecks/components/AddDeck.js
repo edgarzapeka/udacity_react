@@ -41,6 +41,7 @@ class AddDeck extends Component{
         })
 
         this.setState({deckTitle: ''})
+        this.props.navigation.goBack()
     }
 
     render(){
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     },
   });
 
-function mapStateToProps(decks){
+function mapStateToProps(decks, { navigation }){
     return {
         decks
     }
